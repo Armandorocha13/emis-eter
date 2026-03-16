@@ -1,31 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { downloadDriveExcelAsJson } from '@/lib/googleDrive';
+import { readLocalExcelAsJson } from '@/lib/localData';
 
 // Cache revalidation: 5 minutes (300 seconds)
 export const revalidate = 300;
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const type = (searchParams.get('type') || searchParams.get('source') || 'EMIS').toUpperCase();
-
-  const fileIdEmis = process.env.DRIVE_FILE_ID_EMIS;
-  const fileIdEter = process.env.DRIVE_FILE_ID_ETER;
-
-  if (type !== 'EMIS' && type !== 'ETER') {
-    return NextResponse.json({ success: false, error: 'Invalid type parameter' }, { status: 400 });
-  }
-
-  const fileId = type === 'EMIS' ? fileIdEmis : fileIdEter;
-
-  if (!fileId) {
-    return NextResponse.json({ 
-      success: false, 
-      error: `DRIVE_FILE_ID_${type} not configured in environment variables` 
-    }, { status: 500 });
-  }
-
   try {
-    const rawData = await downloadDriveExcelAsJson(fileId);
+    const searchParams = request.nextUrl.searchParams;
+    const type = (searchParams.get('type') || searchParams.get('source') || 'EMIS').toUpperCase() as 'EMIS' | 'ETER';
+
+    if (type !== 'EMIS' && type !== 'ETER') {
+      return NextResponse.json({ success: false, error: 'Invalid type parameter' }, { status: 400 });
+    }
+
+    console.log(`[API]: Fetching data from local file for type: ${type}`);
+    const rawData = await readLocalExcelAsJson(type);
+    console.log(`[API]: Data fetched successfully. Row count: ${rawData.length}`);
     
     // Reference date: March 16, 2026
     const today = new Date('2026-03-16');
@@ -91,11 +81,10 @@ export async function GET(request: NextRequest) {
       count: processedData.length,
       data: processedData 
     });
-
   } catch (error: any) {
-    console.error(`[API Error]: ${error.message}`);
+    console.error(`[API Global Error]: ${error.message}`);
     return NextResponse.json(
-      { success: false, error: 'Internal Server Error', details: error.message },
+      { success: false, error: error.message, stack: error.stack },
       { status: 500 }
     );
   }

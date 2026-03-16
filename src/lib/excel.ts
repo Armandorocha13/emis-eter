@@ -26,7 +26,7 @@ export interface StandardizedData {
 export async function readExcelFile(source: 'EMIS' | 'ETER') {
   const fileName = `${source}.xlsx`;
   const lockFileName = `~$${source}.xlsx`;
-  const directoryPath = 'G:\\Meu Drive\\Projetos trabalho\\001 - Emis x Terminais';
+  const directoryPath = path.join(process.cwd(), 'data');
   const filePath = path.join(directoryPath, fileName);
   const lockFilePath = path.join(directoryPath, lockFileName);
 
