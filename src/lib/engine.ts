@@ -48,7 +48,7 @@ export function processDashboardData(
           baseGrouping[base][tecnico] = (baseGrouping[base][tecnico] || 0) + diffDays;
         }
       }
-    } else {
+    } else if (item.raw) {
       const hasSerial = !!(item.raw['SERIAL'] || item.raw['Serial']);
       if (hasSerial) {
         baseGrouping[base][tecnico] = (baseGrouping[base][tecnico] || 0) + 1;

@@ -55,9 +55,14 @@ export async function GET(request: NextRequest) {
           sap: String(findVal(['sap', 'SAP']) || ''),
           quantidade: Number(findVal(['quantidade', 'QUANTIDADE', 'Qtd']) || 0),
           status,
-          data: dateVal ? new Date(dateVal).toISOString() : '',
+          data: (() => {
+            if (!dateVal) return '';
+            const d = new Date(dateVal);
+            return isNaN(d.getTime()) ? '' : d.toISOString();
+          })(),
           aging: diffDays, // Useful for the frontend
-          tipo: 'EMIS'
+          tipo: 'EMIS',
+          raw: row
         };
       } else {
         // ETER Logic
@@ -69,8 +74,14 @@ export async function GET(request: NextRequest) {
           status: findVal(['STATUS', 'Status']) || 'CONCLUIDO',
           item: `${findVal(['MODELO', 'Modelo']) || ''} ${findVal(['SERIAL', 'Serial']) || ''}`.trim() || 'N/A',
           quantidade: 1,
-          data: findVal(['DATA ALTERAÇÃO', 'Data', 'DATA']) ? new Date(findVal(['DATA ALTERAÇÃO', 'Data', 'DATA'])).toISOString() : '',
-          tipo: 'ETER'
+          data: (() => {
+            const rawDate = findVal(['DATA ALTERAÇÃO', 'Data', 'DATA']);
+            if (!rawDate) return '';
+            const d = new Date(rawDate);
+            return isNaN(d.getTime()) ? '' : d.toISOString();
+          })(),
+          tipo: 'ETER',
+          raw: row
         };
       }
     });
