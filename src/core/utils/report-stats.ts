@@ -29,8 +29,8 @@ export function getTotalReportsCount(): number {
       );
     });
 
-    // +1 para EMIS/ETER (se existir) e +3 para os relatórios fixos de PowerBI
-    return others.length + (hasEmisOrEter ? 1 : 0) + 3;
+    // +1 para EMIS/ETER (se existir) e +4 para os relatórios fixos de PowerBI
+    return others.length + (hasEmisOrEter ? 1 : 0) + 4;
   } catch (error) {
     console.error("Erro ao ler a pasta /data para contagem de relatórios:", error);
     return 0;
@@ -105,6 +105,14 @@ export function getAvailableReportsMetada() {
             title: 'ONE PAGE REPORT: IHS',
             externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiYTNiY2M4YTUtZDkyNi00YzcwLWI2NTMtNWY1MGUwOTk0ZmY3IiwidCI6IjhjN2JlNjNhLWE1YjEtNDA2MS04ZTUwLWU0ZTk4OTQ3ZGU1YyJ9',
             description: 'Relatório One Page IHS para visão executiva (PowerBI).'
+        });
+
+        // Adiciona o relatório VIVO AGING
+        reports.push({
+            id: 'vivo-aging',
+            title: 'VIVO AGING',
+            externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiYzExYWRmNTgtYmU5YS00YTUwLTlkNWMtY2Q2OGEyMzVmM2Y2IiwidCI6IjhjN2JlNjNhLWE1YjEtNDA2MS04ZTUwLWU0ZTk4OTQ3ZGU1YyJ9',
+            description: 'Acompanhamento de Aging VIVO para gestão de prazos e pendências (PowerBI).'
         });
 
         return reports;
