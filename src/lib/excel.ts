@@ -18,7 +18,7 @@ const toLocalISO = (date: Date) => {
 const parseToStandardDate = (val: any, fallbackTime: string = '00:00:00') => {
   if (!val) return '';
   if (val instanceof Date) return toLocalISO(val);
-  
+
   const s = String(val).trim();
   if (s.includes(' ')) {
     // Likely YYYY-MM-DD HH:mm:ss
@@ -58,11 +58,11 @@ export const formatName = (fullName: string) => {
   if (!fullName) return 'N/A';
   const parts = String(fullName).trim().toLowerCase().split(/\s+/);
   if (parts.length === 0 || (parts.length === 1 && parts[0] === '')) return 'N/A';
-  
+
   const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-  
+
   if (parts.length === 1) return capitalize(parts[0]);
-  
+
   const first = capitalize(parts[0]);
   const last = capitalize(parts[parts.length - 1]);
   return `${first} ${last}`;
@@ -144,7 +144,7 @@ export async function readExcelFile(source: 'EMIS' | 'ETER') {
         // Encontrar a coluna de status dinamicamente se não estiver nas chaves padrão
         const findDynamicStatus = () => {
           const statusKeys = ['STATUS', 'Status', 'SITUACAO', 'SITUAÇÃO', 'Situacao', 'Situação', 'SITUAÃ‡ÃƒO', 'QUALIDADE', 'Qualidade'];
-          
+
           // Primeiro tenta as chaves conhecidas
           for (const key of statusKeys) {
             if (row[key] !== undefined) return row[key];
@@ -162,7 +162,7 @@ export async function readExcelFile(source: 'EMIS' | 'ETER') {
 
         const dateRaw = getVal(['DATA_TRATADA', 'DATA ALTERAÇÃO', 'DATA ALTERAÃ‡ÃƒO', 'DATA', 'Data']);
         const timePart = String(getVal(['HORA_TRATADA', 'HORA ALTERAÇÃO', 'HORA ALTERAÃ‡ÃƒO', 'HORA', 'Hora']) || '00:00:00');
-        
+
         return {
           id: getVal(['CODIGO', 'Codigo', 'ID']) || `ETER-${index}`,
           data: parseToStandardDate(dateRaw, timePart),
@@ -171,7 +171,7 @@ export async function readExcelFile(source: 'EMIS' | 'ETER') {
           status: (() => {
             const rawStatus = String(findDynamicStatus() || '');
             const s = rawStatus.trim().toUpperCase();
-            if (s === 'CONFIRMAÇÃO DO TÉCNICO' || s === 'CONFIRMAÃ‡ÃƒO DO TÃ‰CNICO' || s === 'SEM RESPOSTA' || s === '') return 'PENDENTE';
+            if (s === 'CONFIRMAÇÃO DO TÉCNICO' || s === 'CONFIRMAÃ‡ÃƒO DO TÃ‰CNICO' || s === 'SEM RESPOSTA' || s === '') return 'Confirmação do tecnico';
             return s;
           })(),
           base: String(getVal(['CIDADE', 'Cidade', 'BASE', 'Base']) || '').trim().toUpperCase(),
