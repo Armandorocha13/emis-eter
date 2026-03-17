@@ -14,7 +14,8 @@ export interface StandardizedData {
   base: string;
   item: string;
   quantidade: number;
-  tipo: 'EMIS' | 'ETER';
+  tipo: string;
+  aging?: number;
   raw?: any;
 }
 

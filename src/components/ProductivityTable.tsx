@@ -7,7 +7,7 @@ import { MapPin, User, BarChart3, ChevronDown, ChevronRight } from 'lucide-react
 
 interface ProductivityTableProps {
   data: BaseProductivity[];
-  source: 'EMIS' | 'ETER';
+  source: string;
   loading?: boolean;
 }
 

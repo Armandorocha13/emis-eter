@@ -17,7 +17,7 @@ import { TrendingUp, Award } from 'lucide-react';
 
 interface ProductivityChartProps {
   data: BaseProductivity[];
-  source: 'EMIS' | 'ETER';
+  source: string;
   loading?: boolean;
   activeFilter?: string;
 }

@@ -7,7 +7,7 @@ import { User, Calendar, Hash, Box, ChevronDown, ChevronRight, LayoutList } from
 
 interface GroupedTableProps {
   data: StandardizedData[];
-  source: 'EMIS' | 'ETER';
+  source: string;
   loading?: boolean;
 }
 

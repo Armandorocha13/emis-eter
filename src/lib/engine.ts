@@ -16,10 +16,11 @@ export interface BaseProductivity {
  * Aggregates by BASE first, then by Technician
  */
 export function processDashboardData(
-  source: 'EMIS' | 'ETER', 
+  source: string, 
   data: StandardizedData[]
 ): BaseProductivity[] {
   const baseGrouping: Record<string, Record<string, number>> = {};
+  const isEmis = source.toUpperCase() === 'EMIS';
 
   data.forEach((item) => {
     const base = item.base || 'SEM BASE';
@@ -29,30 +30,13 @@ export function processDashboardData(
       baseGrouping[base] = {};
     }
 
-    if (source === 'EMIS') {
-      // Logic: Difference in days between item's date and today
-      const itemDateValue = item.data;
-      if (itemDateValue) {
-        const itemDate = new Date(itemDateValue);
-        const today = new Date();
-        
-        // Reset hours for accurate day calculation
-        itemDate.setHours(0, 0, 0, 0);
-        today.setHours(0, 0, 0, 0);
-        
-        const diffTime = today.getTime() - itemDate.getTime();
-        const diffDays = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
-        
-        // Assign the age/days-aged to the technician
-        if (!isNaN(diffDays)) {
-          baseGrouping[base][tecnico] = (baseGrouping[base][tecnico] || 0) + diffDays;
-        }
-      }
-    } else if (item.raw) {
-      const hasSerial = !!(item.raw['SERIAL'] || item.raw['Serial']);
-      if (hasSerial) {
-        baseGrouping[base][tecnico] = (baseGrouping[base][tecnico] || 0) + 1;
-      }
+    if (isEmis) {
+      // Logic for EMIS: Aging days
+      const aging = item.aging || 0;
+      baseGrouping[base][tecnico] = (baseGrouping[base][tecnico] || 0) + aging;
+    } else {
+      // Default logic for other reports: count items (assumed productivity)
+      baseGrouping[base][tecnico] = (baseGrouping[base][tecnico] || 0) + 1;
     }
   });
 

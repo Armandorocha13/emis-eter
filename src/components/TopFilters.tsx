@@ -16,7 +16,7 @@ interface TopFiltersProps {
   availableStatuses: string[];
   availableBases: string[];
   onReset: () => void;
-  source: 'EMIS' | 'ETER';
+  source: string;
 }
 
 export function TopFilters({
