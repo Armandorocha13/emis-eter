@@ -10,12 +10,12 @@ export default function HubPage() {
   const reports = getAvailableReportsMetada();
 
   return (
-    <main className="min-h-screen bg-white p-6 md:p-12 animate-in fade-in duration-1000">
-      <div className="max-w-7xl mx-auto space-y-12">
+    <main className="min-h-screen bg-white p-4 md:p-8 animate-in fade-in duration-1000">
+      <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Section */}
-        <section className="flex flex-col items-center justify-center space-y-6 pt-12 text-center">
-          <div className="relative w-48 h-12 mb-4">
+        <section className="flex flex-col items-center justify-center space-y-4 pt-6 text-center">
+          <div className="relative w-40 h-10 mb-2">
             <Image 
               src="/logo-ffa.png" 
               alt="FFA Logo" 
@@ -25,7 +25,7 @@ export default function HubPage() {
             />
           </div>
           <div className="space-y-2">
-            <h1 className="text-3xl md:text-5xl font-black text-black tracking-tighter uppercase">
+            <h1 className="text-2xl md:text-4xl font-black text-black tracking-tighter uppercase">
               HUB de Relatórios <span className="text-zinc-300">FFA</span>
             </h1>
             <p className="text-zinc-500 font-medium max-w-lg mx-auto text-sm md:text-base leading-relaxed">
@@ -54,6 +54,8 @@ export default function HubPage() {
                 key={report.id}
                 title={report.title}
                 slug={report.id}
+                description={report.description}
+                externalUrl={report.externalUrl}
               />
             ))}
             
@@ -67,7 +69,7 @@ export default function HubPage() {
         </section>
 
         {/* Footer info */}
-        <footer className="pt-20 pb-8 text-center border-t border-zinc-100">
+        <footer className="pt-12 pb-6 text-center border-t border-zinc-100">
              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-300">
                 Hub de Gestão Integrada © {new Date().getFullYear()} — Todos os direitos reservados
              </span>

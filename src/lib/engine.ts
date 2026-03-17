@@ -30,14 +30,9 @@ export function processDashboardData(
       baseGrouping[base] = {};
     }
 
-    if (isEmis) {
-      // Logic for EMIS: Aging days
-      const aging = item.aging || 0;
-      baseGrouping[base][tecnico] = (baseGrouping[base][tecnico] || 0) + aging;
-    } else {
-      // Default logic for other reports: count items (assumed productivity)
-      baseGrouping[base][tecnico] = (baseGrouping[base][tecnico] || 0) + 1;
-    }
+    // Unified logic: count occurrences (productivity)
+    // Removed specific EMIS aging-sum to ensure visibility of all records
+    baseGrouping[base][tecnico] = (baseGrouping[base][tecnico] || 0) + 1;
   });
 
   return Object.entries(baseGrouping).map(([baseName, tecnicosObj]) => {

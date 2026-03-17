@@ -37,7 +37,7 @@ export function ProductivityTable({ data, source, loading }: ProductivityTablePr
         )}>
           <BarChart3 size={20} />
         </div>
-        <h2 className="text-xl font-black text-white uppercase tracking-tighter">
+        <h2 className="text-xl font-black text-black uppercase tracking-tighter">
           Consolidado de {source === 'EMIS' ? 'Dias' : 'Seriais'} por Base
         </h2>
       </div>
@@ -47,8 +47,8 @@ export function ProductivityTable({ data, source, loading }: ProductivityTablePr
           <table className="w-full text-left border-collapse min-w-[600px] md:min-w-0">
             <thead>
               <tr className="border-b border-zinc-100 bg-zinc-50/50">
-                <th className="px-4 md:px-8 py-4 md:py-5 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em]">Unidade / Técnico</th>
-                <th className="px-4 md:px-8 py-4 md:py-5 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] text-right">Produtividade ({metricLabel})</th>
+                <th className="px-4 md:px-8 py-4 md:py-5 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Unidade / Técnico</th>
+                <th className="px-4 md:px-8 py-4 md:py-5 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] text-right">Produtividade ({metricLabel})</th>
               </tr>
             </thead>
             <tbody>
@@ -104,13 +104,13 @@ export function ProductivityTable({ data, source, loading }: ProductivityTablePr
                         <td className="px-16 py-3">
                           <div className="flex items-center gap-3">
                             <User size={14} className="text-zinc-300 group-hover:text-zinc-500 transition-colors" />
-                            <span className="text-sm font-bold text-zinc-600 group-hover:text-zinc-900 transition-colors uppercase truncate">
+                            <span className="text-sm font-bold text-zinc-800 group-hover:text-black transition-colors truncate">
                               {t.nome}
                             </span>
                           </div>
                         </td>
                         <td className="px-8 py-3 text-right">
-                          <span className="text-xs font-mono font-bold text-zinc-400 group-hover:text-zinc-600 transition-colors">
+                          <span className="text-xs font-mono font-bold text-zinc-600 group-hover:text-zinc-900 transition-colors">
                             {t.valor}
                           </span>
                         </td>

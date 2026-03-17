@@ -75,8 +75,8 @@ export function GroupedTable({ data, source, loading }: GroupedTableProps) {
           <table className="w-full text-left border-collapse min-w-[800px] md:min-w-0">
             <thead>
               <tr className="border-b border-zinc-100 bg-zinc-50/50">
-                <th className="px-4 md:px-8 py-4 md:py-5 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em]">Técnico Responsável</th>
-                <th className="px-4 md:px-8 py-4 md:py-5 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] text-right">Qtd. Itens</th>
+                <th className="px-4 md:px-8 py-4 md:py-5 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Técnico Responsável</th>
+                <th className="px-4 md:px-8 py-4 md:py-5 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] text-right">Qtd. Itens</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
@@ -106,9 +106,9 @@ export function GroupedTable({ data, source, loading }: GroupedTableProps) {
                           <div className="p-2 bg-zinc-50 border border-zinc-100 rounded-lg group-hover/tech:bg-white group-hover/tech:border-zinc-200 transition-colors">
                             <User size={16} className="text-zinc-400 group-hover/tech:text-zinc-600" />
                           </div>
-                          <span className="text-sm font-black text-zinc-900 uppercase tracking-tight">
-                            {techKey}
-                          </span>
+                            <span className="text-sm font-black text-zinc-900 tracking-tight">
+                              {techKey}
+                            </span>
                         </div>
                       </td>
                       <td className="px-8 py-4 text-right">
@@ -129,10 +129,10 @@ export function GroupedTable({ data, source, loading }: GroupedTableProps) {
                             <table className="w-full border-t border-zinc-100">
                               <thead>
                                 <tr className="bg-zinc-50/50">
-                                  <th className="px-16 py-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest text-left">Item / Descrição</th>
-                                  <th className="px-8 py-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest text-left">SAP / Cód</th>
-                                  <th className="px-8 py-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest text-left">Data Ref</th>
-                                  <th className="px-8 py-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest text-right">Status</th>
+                                  <th className="px-16 py-3 text-[9px] font-bold text-zinc-600 uppercase tracking-widest text-left">Item / Descrição</th>
+                                  <th className="px-8 py-3 text-[9px] font-bold text-zinc-600 uppercase tracking-widest text-left">SAP / Cód</th>
+                                  <th className="px-8 py-3 text-[9px] font-bold text-zinc-600 uppercase tracking-widest text-left">Data Ref</th>
+                                  <th className="px-8 py-3 text-[9px] font-bold text-zinc-600 uppercase tracking-widest text-right">Status</th>
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-zinc-100">
@@ -141,7 +141,7 @@ export function GroupedTable({ data, source, loading }: GroupedTableProps) {
                                     <td className="px-16 py-3">
                                       <div className="flex items-center gap-2">
                                         <Box size={12} className="text-zinc-300" />
-                                        <span className="text-xs font-bold text-zinc-500 uppercase truncate max-w-[300px]">{rec.item}</span>
+                                        <span className="text-xs font-bold text-zinc-700 uppercase truncate max-w-[300px]">{rec.item}</span>
                                       </div>
                                     </td>
                                     <td className="px-8 py-3">
@@ -151,7 +151,7 @@ export function GroupedTable({ data, source, loading }: GroupedTableProps) {
                                       </div>
                                     </td>
                                     <td className="px-8 py-3">
-                                      <div className="flex items-center gap-2 text-zinc-400">
+                                      <div className="flex items-center gap-2 text-zinc-600">
                                         <Calendar size={10} />
                                         <span className="text-[10px] font-medium">{String(rec.data)}</span>
                                       </div>

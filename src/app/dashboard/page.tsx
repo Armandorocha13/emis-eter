@@ -3,16 +3,15 @@
 import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ContextSwitcher } from '@/components/ContextSwitcher';
-import { TopFilters } from '@/components/TopFilters';
+import { ExcelFilters } from '@/components/ExcelFilters';
 import { GroupedTable } from '@/components/GroupedTable';
 import { ProductivityChart } from '@/components/ProductivityChart';
 import { ProductivityTable } from '@/components/ProductivityTable';
 import { cn } from '@/lib/utils';
-import { Loader2, AlertCircle, RefreshCcw, LayoutDashboard, Database } from 'lucide-react';
+import { Loader2, AlertCircle, RefreshCcw, LayoutDashboard, Database, ArrowLeft } from 'lucide-react';
 import { StandardizedData } from '@/lib/excel';
 import { processDashboardData, BaseProductivity } from '@/lib/engine';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
 
 function DashboardContent() {
   const searchParams = useSearchParams();
@@ -28,50 +27,42 @@ function DashboardContent() {
   const [error, setError] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState(false);
 
+  // Filter States
+  const [filters, setFilters] = useState({
+    status: '',
+    base: ''
+  });
+
   const setSource = (newSource: 'EMIS' | 'ETER') => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('tipo', newSource);
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  // Filter States
-  const [filters, setFilters] = useState({
-    date: '',
-    status: '',
-    base: ''
-  });
+  // Reset filters when source changes
+  useEffect(() => {
+    setFilters({ status: '', base: '' });
+  }, [source]);
 
-  // Calculate dynamic options from current data
-  const availableBases = useMemo(() => {
-    return Array.from(new Set(data.map(item => item.base).filter(Boolean))).sort();
-  }, [data]);
-
+  // Calculate dynamic options
   const availableStatuses = useMemo(() => {
     return Array.from(new Set(data.map(item => item.status).filter(Boolean))).sort();
   }, [data]);
 
-  // Reset filters when source changes
-  useEffect(() => {
-    setFilters({ date: '', status: '', base: '' });
-  }, [source]);
+  const availableBases = useMemo(() => {
+    return Array.from(new Set(data.map(item => item.base).filter(Boolean))).sort();
+  }, [data]);
 
   // Apply Filters
   const filteredData = useMemo(() => {
     return data.filter(item => {
+      // 1. Status Filter
       const matchStatus = !filters.status || item.status === filters.status;
+      
+      // 2. Base Filter
       const matchBase = !filters.base || item.base === filters.base;
-      // Date filter logic: from selected date forward
-      let matchDate = true;
-      if (filters.date) {
-        const filterDate = new Date(filters.date);
-        filterDate.setHours(0, 0, 0, 0);
-
-        const itemDate = new Date(item.data);
-        itemDate.setHours(0, 0, 0, 0);
-
-        matchDate = !isNaN(itemDate.getTime()) && itemDate >= filterDate;
-      }
-      return matchStatus && matchBase && matchDate;
+      
+      return matchStatus && matchBase;
     });
   }, [data, filters]);
 
@@ -126,15 +117,18 @@ function DashboardContent() {
           />
         </div>
 
-        {/* Global Filters - KPI Horizontal Style */}
-        <TopFilters
-          filters={filters}
-          setFilters={setFilters}
-          availableStatuses={availableStatuses}
-          availableBases={availableBases}
-          onReset={() => setFilters({ date: '', status: '', base: '' })}
-          source={source}
-        />
+        {/* Global Filters Section */}
+        <div className="bg-white/80 backdrop-blur-sm border border-zinc-200 rounded-[2.5rem] p-6 shadow-sm">
+          <ExcelFilters
+            filters={filters}
+            setFilters={setFilters}
+            availableStatuses={availableStatuses}
+            availableBases={availableBases}
+            onReset={() => setFilters({ base: '', status: '' })}
+            source={source}
+            totalCount={filteredData.length}
+          />
+        </div>
 
         {/* Locked File Warning */}
         {isLocked && (
@@ -188,7 +182,6 @@ function DashboardContent() {
             data={baseProductivity}
             source={source}
             loading={loading}
-            activeFilter={filters.status || filters.base}
           />
           <ProductivityTable
             data={baseProductivity}

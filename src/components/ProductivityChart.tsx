@@ -19,10 +19,9 @@ interface ProductivityChartProps {
   data: BaseProductivity[];
   source: string;
   loading?: boolean;
-  activeFilter?: string;
 }
 
-export function ProductivityChart({ data, source, loading, activeFilter }: ProductivityChartProps) {
+export function ProductivityChart({ data, source, loading }: ProductivityChartProps) {
   const chartData = useMemo(() => {
     const allTecnicos: ProcessedEntry[] = data.flatMap(b => b.tecnicos);
     
@@ -40,7 +39,7 @@ export function ProductivityChart({ data, source, loading, activeFilter }: Produ
       .slice(0, 5);
   }, [data]);
 
-  const metricLabel = source === 'EMIS' ? 'Dias em Aberto' : 'Seriais bipados';
+  const metricLabel = source === 'EMIS' ? 'Enviados' : 'Seriais bipados';
 
   if (loading) {
     return (
@@ -58,7 +57,7 @@ export function ProductivityChart({ data, source, loading, activeFilter }: Produ
             <TrendingUp size={16} />
           </div>
           <h2 className="text-sm font-black text-zinc-900 uppercase tracking-tighter">
-            Top 5 Ofensores: {source === 'EMIS' ? 'Dias' : 'Seriais'} {activeFilter && <span className="text-red-600/50 ml-2">({activeFilter})</span>}
+            Top 5 Ofensores: {source === 'EMIS' ? 'Volume' : 'Seriais'}
           </h2>
         </div>
       </div>
@@ -76,11 +75,10 @@ export function ProductivityChart({ data, source, loading, activeFilter }: Produ
             <YAxis 
               dataKey="name" 
               type="category" 
-              width={100}
-              tick={{ fill: '#71717a', fontSize: 9, fontWeight: 800 }}
+              width={160}
+              tick={{ fill: '#18181b', fontSize: 11, fontWeight: 800 }}
               axisLine={false}
               tickLine={false}
-              tickFormatter={(value: string) => value.split(' ')[0]} 
             />
             <Tooltip 
               cursor={{ fill: 'rgba(0,0,0,0.02)' }}
@@ -113,18 +111,18 @@ export function ProductivityChart({ data, source, loading, activeFilter }: Produ
           <div key={item.name} className="flex items-center justify-between bg-zinc-50 p-2 rounded-xl border border-zinc-100">
             <div className="flex items-center gap-3">
               <span className="text-[10px] font-black text-red-600/30 w-4">{idx + 1}º</span>
-              <span className="text-[10px] font-bold text-zinc-600 uppercase truncate max-w-[150px]">{item.name}</span>
+              <span className="text-xs font-bold text-zinc-800 truncate max-w-[180px]">{item.name}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-black text-zinc-900">{item.value}</span>
-              <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">{source === 'EMIS' ? 'Dias' : 'Ser'}</span>
+              <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">{source === 'EMIS' ? 'Registros' : 'Ser'}</span>
             </div>
           </div>
         ))}
       </div>
 
       <div className="mt-4 pt-3 border-t border-zinc-100 flex items-center justify-between">
-        <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.2em]">
+        <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-[0.2em]">
           Ranking de <span className="text-red-600">Ofensores Críticos</span>
         </p>
         <Award size={12} className="text-red-600" />

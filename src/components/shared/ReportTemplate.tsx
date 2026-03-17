@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { TopFilters } from '@/components/TopFilters';
+import { ExcelFilters } from '@/components/ExcelFilters';
 import { GroupedTable } from '@/components/GroupedTable';
 import { ProductivityChart } from '@/components/ProductivityChart';
 import { ProductivityTable } from '@/components/ProductivityTable';
@@ -23,34 +23,29 @@ function ReportContent({ source }: ReportTemplateProps) {
 
   // Filter States
   const [filters, setFilters] = useState({
-    date: '',
     status: '',
     base: ''
   });
 
   // Calculate dynamic options
-  const availableBases = useMemo(() => {
-    return Array.from(new Set(data.map(item => item.base).filter(Boolean))).sort();
-  }, [data]);
-
   const availableStatuses = useMemo(() => {
     return Array.from(new Set(data.map(item => item.status).filter(Boolean))).sort();
+  }, [data]);
+
+  const availableBases = useMemo(() => {
+    return Array.from(new Set(data.map(item => item.base).filter(Boolean))).sort();
   }, [data]);
 
   // Apply Filters
   const filteredData = useMemo(() => {
     return data.filter(item => {
+      // 1. Status Filter (Exact Match)
       const matchStatus = !filters.status || item.status === filters.status;
+      
+      // 2. Base Filter (Exact Match)
       const matchBase = !filters.base || item.base === filters.base;
-      let matchDate = true;
-      if (filters.date) {
-        const filterDate = new Date(filters.date);
-        filterDate.setHours(0, 0, 0, 0);
-        const itemDate = new Date(item.data);
-        itemDate.setHours(0, 0, 0, 0);
-        matchDate = !isNaN(itemDate.getTime()) && itemDate >= filterDate;
-      }
-      return matchStatus && matchBase && matchDate;
+      
+      return matchStatus && matchBase;
     });
   }, [data, filters]);
 
@@ -89,34 +84,21 @@ function ReportContent({ source }: ReportTemplateProps) {
       source.toUpperCase() === 'EMIS' ? "selection:bg-indigo-100" : "selection:bg-emerald-100"
     )}>
       <div className="relative z-10 max-w-7xl mx-auto space-y-6 md:space-y-8">
-
-        {/* Navigation & Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <Link
-            href="/hub"
-            className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-600 transition-colors bg-white px-4 py-2 rounded-full border border-zinc-200 shadow-sm self-start md:self-auto"
-          >
-            <ArrowLeft size={14} /> Voltar
-          </Link>
-          <div className="flex items-center gap-3">
-            <div className={cn(
-              "w-3 h-3 rounded-full animate-pulse",
-              source.toUpperCase() === 'EMIS' ? "bg-indigo-500" : "bg-emerald-500"
-            )} />
-            <h1 className="text-2xl font-black text-zinc-900 tracking-tighter uppercase">{source} <span className="text-zinc-400">Dashboard</span></h1>
-          </div>
+        
+        {/* Global Filters Section */}
+        <div className="bg-white/80 backdrop-blur-sm border border-zinc-200 rounded-[2.5rem] p-6 shadow-sm">
+          <ExcelFilters
+            filters={filters}
+            setFilters={setFilters}
+            availableStatuses={availableStatuses}
+            availableBases={availableBases}
+            onReset={() => setFilters({ base: '', status: '' })}
+            source={source.toUpperCase() as 'EMIS' | 'ETER'}
+            totalCount={filteredData.length}
+          />
         </div>
 
-        {/* Global Filters */}
-        <TopFilters
-          filters={filters}
-          setFilters={setFilters}
-          availableStatuses={availableStatuses}
-          availableBases={availableBases}
-          onReset={() => setFilters({ date: '', status: '', base: '' })}
-          // @ts-ignore
-          source={source.toUpperCase()}
-        />
+        {/* Navigation & Header */}
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-3xl p-6 flex items-center gap-4 text-red-600">
@@ -163,7 +145,6 @@ function ReportContent({ source }: ReportTemplateProps) {
             // @ts-ignore
             source={source.toUpperCase()}
             loading={loading}
-            activeFilter={filters.status || filters.base}
           />
           <ProductivityTable
             data={baseProductivity}
