@@ -141,6 +141,25 @@ export async function readExcelFile(source: 'EMIS' | 'ETER') {
           return key ? row[key] : undefined;
         };
 
+        // Encontrar a coluna de status dinamicamente se não estiver nas chaves padrão
+        const findDynamicStatus = () => {
+          const statusKeys = ['STATUS', 'Status', 'SITUACAO', 'SITUAÇÃO', 'Situacao', 'Situação', 'SITUAÃ‡ÃƒO', 'QUALIDADE', 'Qualidade'];
+          
+          // Primeiro tenta as chaves conhecidas
+          for (const key of statusKeys) {
+            if (row[key] !== undefined) return row[key];
+          }
+
+          // Se não achar, procura por qualquer chave que contenha "STATUS", "SITUACAO" ou "SITUAÇÃO"
+          const allKeys = Object.keys(row);
+          const dynamicKey = allKeys.find(k => {
+            const upperK = String(k).toUpperCase();
+            return upperK.includes('STATUS') || upperK.includes('SITUACAO') || upperK.includes('SITUAÇÃO') || upperK.includes('SITUAÃ‡ÃƒO') || upperK.includes('QUALIDADE');
+          });
+
+          return dynamicKey ? row[dynamicKey] : undefined;
+        };
+
         const dateRaw = getVal(['DATA_TRATADA', 'DATA ALTERAÇÃO', 'DATA ALTERAÃ‡ÃƒO', 'DATA', 'Data']);
         const timePart = String(getVal(['HORA_TRATADA', 'HORA ALTERAÇÃO', 'HORA ALTERAÃ‡ÃƒO', 'HORA', 'Hora']) || '00:00:00');
         
@@ -150,8 +169,7 @@ export async function readExcelFile(source: 'EMIS' | 'ETER') {
           responsavel: formatName(getVal(['TECNICO', 'Tecnico', 'ALTERADO POR', 'Técnico']) || ''),
           sap: String(getVal(['SAP', 'sap']) || ''),
           status: (() => {
-            // Coluna H é o índice 7 (A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7)
-            const rawStatus = String(getVal(['STATUS', 'Status', 'SITUACAO']) || '');
+            const rawStatus = String(findDynamicStatus() || '');
             const s = rawStatus.trim().toUpperCase();
             if (s === 'CONFIRMAÇÃO DO TÉCNICO' || s === 'CONFIRMAÃ‡ÃƒO DO TÃ‰CNICO' || s === 'SEM RESPOSTA' || s === '') return 'PENDENTE';
             return s;
