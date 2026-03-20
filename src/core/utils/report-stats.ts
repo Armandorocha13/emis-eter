@@ -29,8 +29,8 @@ export function getTotalReportsCount(): number {
       );
     });
 
-    // +1 para EMIS/ETER (se existir) e +4 para os relatórios fixos de PowerBI
-    return others.length + (hasEmisOrEter ? 1 : 0) + 4;
+    // +1 para EMIS/ETER (se existir) e +5 para os relatórios fixos de PowerBI
+    return others.length + (hasEmisOrEter ? 1 : 0) + 5;
   } catch (error) {
     console.error("Erro ao ler a pasta /data para contagem de relatórios:", error);
     return 0;
@@ -113,6 +113,14 @@ export function getAvailableReportsMetada() {
             title: 'VIVO AGING',
             externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiYzExYWRmNTgtYmU5YS00YTUwLTlkNWMtY2Q2OGEyMzVmM2Y2IiwidCI6IjhjN2JlNjNhLWE1YjEtNDA2MS04ZTUwLWU0ZTk4OTQ3ZGU1YyJ9',
             description: 'Acompanhamento de Aging VIVO para gestão de prazos e pendências (PowerBI).'
+        });
+
+        // Adiciona o relatório GIRO DE EQUIPAMENTO LOCADOS
+        reports.push({
+            id: 'giro-locados',
+            title: 'GIRO DE EQUIPAMENTO LOCADOS',
+            externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiODNjMjYxOGItMmViNi00OTIzLWJlZTEtMDM5MTQ3NDZmM2IzIiwidCI6IjhjN2JlNjNhLWE1YjEtNDA2MS04ZTUwLWU0ZTk4OTQ3ZGU1YyJ9',
+            description: 'Visão detalhada do giro e movimentação de equipamentos locados (PowerBI).'
         });
 
         return reports;
