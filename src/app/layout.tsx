@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Painel de controle: Emis x Eter",
   description: "Dashboard corporativo FFA",
   icons: {
-    icon: '/logo-ffa.png',
+    icon: '/favicon.png',
   }
 };
 

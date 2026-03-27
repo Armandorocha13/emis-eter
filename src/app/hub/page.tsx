@@ -71,7 +71,7 @@ export default function HubPage() {
         {/* Footer info */}
         <footer className="pt-12 pb-6 text-center border-t border-zinc-100">
              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-300">
-                Hub de Gestão Integrada © {new Date().getFullYear()} — Todos os direitos reservados
+                Hub de Gestão Integrada © {new Date().getFullYear()} — Feito por AEROCODE
              </span>
         </footer>
       </div>

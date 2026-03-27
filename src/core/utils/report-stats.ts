@@ -29,8 +29,8 @@ export function getTotalReportsCount(): number {
       );
     });
 
-    // +1 para EMIS/ETER (se existir) e +5 para os relatórios fixos de PowerBI
-    return others.length + (hasEmisOrEter ? 1 : 0) + 5;
+    // +1 para EMIS/ETER (se existir) e +3 para os relatórios externos (Mercosat, Giro, Carta de Controle)
+    return others.length + (hasEmisOrEter ? 1 : 0) + 3;
   } catch (error) {
     console.error("Erro ao ler a pasta /data para contagem de relatórios:", error);
     return 0;
@@ -83,44 +83,28 @@ export function getAvailableReportsMetada() {
             }
         });
 
-        // Adiciona o relatório fixo do PowerBI
+        // Adiciona o relatório Medicao mercosat
         reports.push({
-            id: 'rm-dm-tm',
-            title: 'RM, DM e TM',
-            externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiMjk1YjQ2YzUtYTljYi00ZjExLWEwZmItNmRmMjZhMTk0NDYxIiwidCI6IjhjN2JlNjNhLWE1YjEtNDA2MS04ZTUwLWU0ZTk4OTQ3ZGU1YyJ9',
-            description: 'Requisições, Devoluções e Transferências em aberto (PowerBI).'
+            id: 'medicao-mercosat',
+            title: 'Medição Mercosat',
+            externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiNDk5OWQwM2QtMTk4YS00YTYyLTkwM2ItNTk2NTRiZTVhZjIxIiwidCI6ImNlYWQ1NmU3LWU5MWEtNDFkMC1iMGU3LTE4N2JiMzgwNjFiZiIsImMiOjR9',
+            description: 'Dashboard de acompanhamento Medição Mercosat (PowerBI).'
         });
 
-        // Adiciona o relatório CLARO: Capex e Opex
-        reports.push({
-            id: 'claro-capex-opex',
-            title: 'CLARO: Capex e Opex',
-            externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiYTAxM2Y1OTQtMzc2OC00NTA0LTgyNmEtZDEzNTk3YmI0YmZhIiwidCI6IjhjN2JlNjNhLWE1YjEtNDA2MS04ZTUwLWU0ZTk4OTQ3ZGU1YyJ9',
-            description: 'Dashboard CLARO de monitoramento de Capex e Opex (PowerBI).'
-        });
-
-        // Adiciona o relatório IHS
-        reports.push({
-            id: 'one-page-ihs',
-            title: 'ONE PAGE REPORT: IHS',
-            externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiYTNiY2M4YTUtZDkyNi00YzcwLWI2NTMtNWY1MGUwOTk0ZmY3IiwidCI6IjhjN2JlNjNhLWE1YjEtNDA2MS04ZTUwLWU0ZTk4OTQ3ZGU1YyJ9',
-            description: 'Relatório One Page IHS para visão executiva (PowerBI).'
-        });
-
-        // Adiciona o relatório VIVO AGING
-        reports.push({
-            id: 'vivo-aging',
-            title: 'VIVO AGING',
-            externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiYzExYWRmNTgtYmU5YS00YTUwLTlkNWMtY2Q2OGEyMzVmM2Y2IiwidCI6IjhjN2JlNjNhLWE1YjEtNDA2MS04ZTUwLWU0ZTk4OTQ3ZGU1YyJ9',
-            description: 'Acompanhamento de Aging VIVO para gestão de prazos e pendências (PowerBI).'
-        });
-
-        // Adiciona o relatório GIRO DE EQUIPAMENTO LOCADOS
+        // Adiciona o relatório Giro de equipamento locado
         reports.push({
             id: 'giro-locados',
-            title: 'GIRO DE EQUIPAMENTO LOCADOS',
+            title: 'Giro de equipamento locado',
             externalUrl: 'https://app.powerbi.com/view?r=eyJrIjoiODNjMjYxOGItMmViNi00OTIzLWJlZTEtMDM5MTQ3NDZmM2IzIiwidCI6IjhjN2JlNjNhLWE1YjEtNDA2MS04ZTUwLWU0ZTk4OTQ3ZGU1YyJ9',
             description: 'Visão detalhada do giro e movimentação de equipamentos locados (PowerBI).'
+        });
+
+        // Adiciona o relatório Carta de controle IHS - EMIS
+        reports.push({
+            id: 'carta-controle-ihs',
+            title: 'Carta de controle IHS - EMIS',
+            externalUrl: 'https://carta-controle.vercel.app/relatorio.html',
+            description: 'Relatório dinâmico de Carta de Controle para IHS e EMIS.'
         });
 
         return reports;
@@ -129,3 +113,5 @@ export function getAvailableReportsMetada() {
         return [];
     }
 }
+
+
