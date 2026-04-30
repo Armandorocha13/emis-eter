@@ -1,36 +1,38 @@
+import { db } from "./banco/cliente";
 import { Relatorio } from "@/tipos/relatorio";
 
 /**
- * Repositório responsável por fornecer os dados dos relatórios.
- * Implementa o padrão Repository para isolar a fonte de dados da interface.
+ * Repositório responsável por fornecer os dados dos relatórios via Neon DB.
  */
 export const repositorioRelatorios = {
   /**
-   * Retorna a lista completa de relatórios disponíveis.
+   * Retorna a lista completa de relatórios disponíveis no banco.
    */
-  obterTodosRelatorios: (): Relatorio[] => {
-    return [
-      {
-        id: 'giro-maquinarios',
-        titulo: 'GIRO DE MAQUINARIOS',
-        urlExterna: 'https://giromaquinarioestoqueffa.vercel.app/',
-        descricao: 'Monitoramento em tempo real de estoque e giro de maquinários.',
-        categoria: 'Operacional'
-      },
-      {
-        id: 'projecao-reposicao',
-        titulo: 'PROJEÇÃO DE REPOSIÇÃO DE MATERIAL',
-        urlExterna: 'https://nextjsspace-iota-one.vercel.app/',
-        descricao: 'Análise preditiva para reposição estratégica de materiais.',
-        categoria: 'Estratégico'
-      }
-    ];
+  obterTodosRelatorios: async (): Promise<Relatorio[]> => {
+    try {
+      const resultados = await db.query.relatorios.findMany({
+        orderBy: (relatorios, { desc }) => [desc(relatorios.criadoEm)],
+      });
+
+      // Mapear campos do banco para o padrão da aplicação
+      return resultados.map(r => ({
+        id: r.id,
+        titulo: r.titulo,
+        urlExterna: r.urlExterna,
+        descricao: r.descricao || "",
+        categoria: r.categoria
+      }));
+    } catch (erro) {
+      console.error("Erro ao buscar relatórios no Neon:", erro);
+      return []; // Fallback para lista vazia
+    }
   },
 
   /**
    * Retorna o total de relatórios ativos.
    */
-  obterContagemTotal: (): number => {
-    return repositorioRelatorios.obterTodosRelatorios().length;
+  obterContagemTotal: async (): Promise<number> => {
+    const relatorios = await repositorioRelatorios.obterTodosRelatorios();
+    return relatorios.length;
   }
 };

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { repositorioRelatorios } from "@/servicos/repositorioRelatorios";
+import { obterRelatorios } from "@/acoes/relatorios";
 import { Relatorio } from "@/tipos/relatorio";
 
 /**
@@ -11,12 +11,21 @@ export function useHubRelatorios() {
   const [categoriaAtiva, setCategoriaAtiva] = useState("Todos");
   const [carregando, setCarregando] = useState(true);
   const [relatoriosRecentes, setRelatoriosRecentes] = useState<Relatorio[]>([]);
+  const [relatorios, setRelatorios] = useState<Relatorio[]>([]);
   const [isModalRecentesAberto, setIsModalRecentesAberto] = useState(false);
 
-  const todosRelatorios = repositorioRelatorios.obterTodosRelatorios();
-  const totalRelatorios = repositorioRelatorios.obterContagemTotal();
-
   useEffect(() => {
+    async function inicializar() {
+      try {
+        const dados = await obterRelatorios();
+        setRelatorios(dados);
+      } catch (e) {
+        console.error("Erro ao inicializar hub", e);
+      } finally {
+        setCarregando(false);
+      }
+    }
+
     // Carregar relatórios recentes do localStorage
     const salvos = localStorage.getItem('recent_reports');
     if (salvos) {
@@ -27,24 +36,33 @@ export function useHubRelatorios() {
       }
     }
 
-    // Simular carregamento inicial
-    const timer = setTimeout(() => setCarregando(false), 1200);
-    return () => clearTimeout(timer);
+    inicializar();
   }, []);
 
+  const totalRelatorios = relatorios.length;
+
   const categorias = useMemo(() => {
-    const cats = new Set(todosRelatorios.map(r => r.categoria).filter(Boolean));
+    const cats = new Set(relatorios.map(r => r.categoria).filter(Boolean));
     return ["Todos", ...Array.from(cats)];
-  }, [todosRelatorios]);
+  }, [relatorios]);
 
   const relatoriosFiltrados = useMemo(() => {
-    return todosRelatorios.filter(relatorio => {
+    return relatorios.filter(relatorio => {
       const matchesPesquisa = relatorio.titulo.toLowerCase().includes(pesquisa.toLowerCase()) || 
                               relatorio.descricao?.toLowerCase().includes(pesquisa.toLowerCase());
       const matchesCategoria = categoriaAtiva === "Todos" || relatorio.categoria === categoriaAtiva;
       return matchesPesquisa && matchesCategoria;
     });
-  }, [todosRelatorios, pesquisa, categoriaAtiva]);
+  }, [relatorios, pesquisa, categoriaAtiva]);
+
+  const recarregarRelatorios = async () => {
+    try {
+      const dados = await obterRelatorios();
+      setRelatorios(dados);
+    } catch (e) {
+      console.error("Erro ao recarregar", e);
+    }
+  };
 
   return {
     pesquisa,
@@ -57,6 +75,7 @@ export function useHubRelatorios() {
     setIsModalRecentesAberto,
     totalRelatorios,
     categorias,
-    relatoriosFiltrados
+    relatoriosFiltrados,
+    recarregarRelatorios
   };
 }

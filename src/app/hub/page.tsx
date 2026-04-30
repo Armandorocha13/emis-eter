@@ -6,6 +6,7 @@ import { useHubRelatorios } from "@/hooks/useHubRelatorios";
 import { EstatisticasKpi } from "@/componentes/central/EstatisticasKpi";
 import { CartaoRelatorio } from "@/componentes/central/CartaoRelatorio";
 import { EsqueletoRelatorio } from "@/componentes/central/EsqueletoRelatorio";
+import { ModalCadastroRelatorio } from "@/componentes/central/ModalCadastroRelatorio";
 import { Search, X, Clock, Database, ArrowRight } from "lucide-react";
 
 export default function HubPage() {
@@ -20,16 +21,22 @@ export default function HubPage() {
     setIsModalRecentesAberto,
     totalRelatorios,
     categorias,
-    relatoriosFiltrados
+    relatoriosFiltrados,
+    recarregarRelatorios
   } = useHubRelatorios();
 
   return (
     <main className="min-h-screen bg-zinc-50/80 p-4 md:p-8 animate-in fade-in duration-1000">
       <div className="max-w-7xl mx-auto space-y-8">
         
-        {/* Cabeçalho */}
-        <section className="flex flex-col items-center justify-center space-y-4 pt-6 text-center">
-          <div className="relative w-40 h-10 mb-2">
+        {/* Navbar Superior */}
+        <header className="flex justify-end items-center px-2">
+          <ModalCadastroRelatorio onSucesso={recarregarRelatorios} />
+        </header>
+
+        {/* Cabeçalho Centrado */}
+        <section className="flex flex-col items-center justify-center space-y-4 pt-2 pb-6 text-center">
+          <div className="relative w-64 h-16 mb-2">
             <Image 
               src="/logo-ffa.png" 
               alt="FFA Logo" 
