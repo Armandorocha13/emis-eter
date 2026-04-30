@@ -18,13 +18,15 @@ export function getAvailableReportsMetada() {
       id: 'giro-maquinarios',
       title: 'GIRO DE MAQUINARIOS',
       externalUrl: 'https://giromaquinarioestoqueffa.vercel.app/',
-      description: 'Gestão de estoque e movimentação de maquinários em tempo real.'
+      description: 'Monitoramento em tempo real de estoque e giro de maquinários.',
+      category: 'Operacional'
     },
     {
       id: 'projecao-reposicao',
       title: 'PROJEÇÃO DE REPOSIÇÃO DE MATERIAL',
       externalUrl: 'https://nextjsspace-iota-one.vercel.app/',
-      description: 'Análise e projeção de reposição de materiais estratégicos.'
+      description: 'Análise preditiva para reposição estratégica de materiais.',
+      category: 'Estratégico'
     }
   ];
 }
