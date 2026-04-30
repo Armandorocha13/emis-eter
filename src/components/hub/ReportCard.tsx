@@ -34,7 +34,7 @@ export function ReportCard({ title, slug, description, externalUrl }: ReportCard
         </CardContent>
         <CardFooter className="flex justify-end pt-4">
           <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-zinc-400 group-hover:text-black transition-colors">
-            {isExternal ? "Ver PowerBI" : "Acessar"} <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+            {isExternal && externalUrl?.includes('powerbi.com') ? "Ver PowerBI" : "Acessar"} <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
           </div>
         </CardFooter>
       </Card>
