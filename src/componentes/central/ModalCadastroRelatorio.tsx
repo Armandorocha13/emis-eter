@@ -12,6 +12,11 @@ export function ModalCadastroRelatorio({ onSucesso }: ModalCadastroRelatorioProp
   const [aberto, setAberto] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState("");
+  const [titulo, setTitulo] = useState("");
+  const [urlExterna, setUrlExterna] = useState("");
+  const [descricao, setDescricao] = useState("");
+
+  const formularioValido = titulo.trim() !== "" && urlExterna.trim() !== "" && descricao.trim() !== "";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -70,6 +75,8 @@ export function ModalCadastroRelatorio({ onSucesso }: ModalCadastroRelatorioProp
               <input 
                 name="titulo" 
                 required 
+                value={titulo}
+                onChange={(e) => setTitulo(e.target.value)}
                 placeholder="Ex: Gestão de Estoque 2024"
                 className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl text-sm font-bold focus:outline-none focus:border-black focus:bg-white transition-all"
               />
@@ -89,6 +96,22 @@ export function ModalCadastroRelatorio({ onSucesso }: ModalCadastroRelatorioProp
                   <option value="Comercial">Comercial</option>
                 </select>
               </div>
+              
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Operadora</label>
+                <select 
+                  name="operadora" 
+                  required
+                  className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl text-sm font-bold focus:outline-none focus:border-black focus:bg-white transition-all appearance-none"
+                >
+                  <option value="FFA">Nenhuma (Padrão)</option>
+                  <option value="IHS">IHS Towers</option>
+                  <option value="Claro">Claro</option>
+                  <option value="Vivo">Vivo</option>
+                  <option value="TIM">TIM</option>
+                  <option value="TIM IHS">TIM + IHS</option>
+                </select>
+              </div>
 
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Link do Dashboard</label>
@@ -96,6 +119,8 @@ export function ModalCadastroRelatorio({ onSucesso }: ModalCadastroRelatorioProp
                   name="urlExterna" 
                   type="url" 
                   required 
+                  value={urlExterna}
+                  onChange={(e) => setUrlExterna(e.target.value)}
                   placeholder="https://app.powerbi.com/..."
                   className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl text-sm font-bold focus:outline-none focus:border-black focus:bg-white transition-all"
                 />
@@ -105,8 +130,10 @@ export function ModalCadastroRelatorio({ onSucesso }: ModalCadastroRelatorioProp
             <div className="space-y-1.5">
               <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Descrição Curta</label>
               <textarea 
-                name="descricao" 
+               name="descricao" 
                 rows={3}
+                value={descricao}
+                onChange={(e) => setDescricao(e.target.value)}
                 placeholder="Descreva brevemente o objetivo deste relatório..."
                 className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl text-sm font-bold focus:outline-none focus:border-black focus:bg-white transition-all resize-none"
               />
@@ -129,8 +156,8 @@ export function ModalCadastroRelatorio({ onSucesso }: ModalCadastroRelatorioProp
              </button>
              <button 
                 type="submit"
-                disabled={enviando}
-                className="flex-[2] py-5 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                disabled={enviando || !formularioValido}
+                className="flex-[2] py-5 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-zinc-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
              >
                {enviando ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar Relatório"}
              </button>

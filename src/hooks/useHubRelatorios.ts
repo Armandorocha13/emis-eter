@@ -10,9 +10,7 @@ export function useHubRelatorios() {
   const [pesquisa, setPesquisa] = useState("");
   const [categoriaAtiva, setCategoriaAtiva] = useState("Todos");
   const [carregando, setCarregando] = useState(true);
-  const [relatoriosRecentes, setRelatoriosRecentes] = useState<Relatorio[]>([]);
   const [relatorios, setRelatorios] = useState<Relatorio[]>([]);
-  const [isModalRecentesAberto, setIsModalRecentesAberto] = useState(false);
 
   useEffect(() => {
     async function inicializar() {
@@ -26,15 +24,7 @@ export function useHubRelatorios() {
       }
     }
 
-    // Carregar relatórios recentes do localStorage
-    const salvos = localStorage.getItem('recent_reports');
-    if (salvos) {
-      try {
-        setRelatoriosRecentes(JSON.parse(salvos));
-      } catch (e) {
-        console.error("Erro ao carregar recentes", e);
-      }
-    }
+
 
     inicializar();
   }, []);
@@ -70,9 +60,6 @@ export function useHubRelatorios() {
     categoriaAtiva,
     setCategoriaAtiva,
     carregando,
-    relatoriosRecentes,
-    isModalRecentesAberto,
-    setIsModalRecentesAberto,
     totalRelatorios,
     categorias,
     relatoriosFiltrados,

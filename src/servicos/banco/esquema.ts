@@ -6,6 +6,7 @@ export const relatorios = pgTable("relatorios", {
   urlExterna: text("url_externa").notNull(),
   descricao: text("descricao"),
   categoria: text("categoria").notNull(),
+  operadora: text("operadora").notNull().default("IHS"),
   criadoEm: timestamp("criado_em").defaultNow().notNull(),
 });
 

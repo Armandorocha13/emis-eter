@@ -17,6 +17,7 @@ export async function obterRelatorios() {
       urlExterna: r.urlExterna,
       descricao: r.descricao || "",
       categoria: r.categoria,
+      operadora: r.operadora,
     }));
   } catch (erro) {
     console.error("Erro ao buscar relatórios no Neon:", erro);
@@ -32,8 +33,9 @@ export async function cadastrarRelatorio(formData: FormData) {
   const urlExterna = formData.get('urlExterna') as string;
   const descricao = formData.get('descricao') as string;
   const categoria = formData.get('categoria') as string;
+  const operadora = formData.get('operadora') as string || 'IHS';
 
-  if (!titulo || !urlExterna || !categoria) {
+  if (!titulo || !urlExterna || !categoria || !operadora) {
     throw new Error("Campos obrigatórios ausentes");
   }
 
@@ -43,6 +45,7 @@ export async function cadastrarRelatorio(formData: FormData) {
       urlExterna,
       descricao,
       categoria,
+      operadora,
     });
 
     // Revalidar o cache da página do hub

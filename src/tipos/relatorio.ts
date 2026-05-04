@@ -4,6 +4,7 @@ export interface Relatorio {
   urlExterna: string;
   descricao: string;
   categoria: string;
+  operadora: string;
 }
 
 export interface EstatisticasGerais {
