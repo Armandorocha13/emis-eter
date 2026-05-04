@@ -20,7 +20,8 @@ export const repositorioRelatorios = {
         titulo: r.titulo,
         urlExterna: r.urlExterna,
         descricao: r.descricao || "",
-        categoria: r.categoria
+        categoria: r.categoria,
+        operadora: r.operadora
       }));
     } catch (erro) {
       console.error("Erro ao buscar relatórios no Neon:", erro);
